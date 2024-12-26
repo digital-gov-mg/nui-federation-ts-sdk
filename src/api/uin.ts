@@ -1,0 +1,28 @@
+import { Base } from './base'
+import {
+  GetOrCreateUINRequest,
+  UINResponse,
+  GenerateBatchUINResponse,
+} from '../types/uin'
+
+export class UIN extends Base {
+  async getOrCreateUIN(payload: GetOrCreateUINRequest[]): Promise<UINResponse> {
+    return this.request<UINResponse>('/uins', {
+      method: 'PUT',
+      data: payload,
+    })
+  }
+
+  async revokeUIN(uin: string): Promise<UINResponse> {
+    return this.request<UINResponse>(`/uins/${uin}/revoke`, {
+      method: 'DELETE',
+    })
+  }
+
+  async generateBatchUIN(count: string): Promise<GenerateBatchUINResponse> {
+    return this.request<GenerateBatchUINResponse>('/uins/batch', {
+      method: 'POST',
+      params: { count },
+    })
+  }
+}
