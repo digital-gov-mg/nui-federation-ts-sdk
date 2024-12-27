@@ -1,4 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+
 import { axiosConfig } from '../config/axios'
 
 export abstract class Base {
@@ -17,10 +18,14 @@ export abstract class Base {
         url: endpoint,
         ...options,
       })
+
       return response.data
     } catch (error: any) {
       const errorMessage =
-        error.response?.data?.message || error.message || 'Request failed'
+        error.response?.data?.message ||
+        error.message ||
+        'An error occurred while sending request'
+
       throw new Error(errorMessage)
     }
   }

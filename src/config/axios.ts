@@ -1,10 +1,13 @@
-export const axiosConfig = () => {
-  const baseUrl =
-    process.env.NUI_FED_API_URL || 'https://staging-api.registry.digital.gov.mg'
-  const apiKey = process.env.NUI_FED_API_KEY
+export function axiosConfig() {
+  const baseUrl = process.env.NUI_FEDERATION_API_URL
+  const apiKey = process.env.NUI_FEDERATION_API_KEY
+
+  if (!baseUrl) {
+    throw new Error('Environment variable NUI_FEDERATION_API_URL is missing')
+  }
 
   if (!apiKey) {
-    throw new Error('Environment variable NUI_FED_API_KEY is missing')
+    throw new Error('Environment variable NUI_FEDERATION_API_KEY is missing')
   }
 
   return {
