@@ -1,5 +1,5 @@
 {
-  "name": "@ugd/nui-federation-ts-sdk",
+  "name": "@ugd-mg/nui-federation-ts-sdk",
   "version": "0.1.0",
   "description": "NUI Federation TypeScript SDK",
   "main": "dist/index.js",

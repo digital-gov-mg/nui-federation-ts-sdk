@@ -1,0 +1,35 @@
+stages:
+  - lint
+  - publish
+
+variables:
+  NODE_ENV: development
+  PNPM_HOME: $CI_PROJECT_DIR/.pnpm
+  NPM_TOKEN: $CI_JOB_TOKEN
+
+cache:
+  paths:
+    - .pnpm-store
+
+before_script:
+  - curl -fsSL https://get.pnpm.io/install.sh | sh -
+  - export PATH="$PNPM_HOME:$PATH"
+  - pnpm install
+
+lint:
+  stage: lint
+  script:
+    - pnpm run lint
+  only:
+    - merge_requests
+    - branches
+
+publish:
+  stage: publish
+  image: node:20
+  script:
+    - echo "//gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/:_authToken=${CI_JOB_TOKEN}" > .npmrc
+    - echo "@ugd-mg:registry=https://gitlab.com/api/v4/projects/${CI_PROJECT_ID}/packages/npm/" >> .npmrc
+    - pnpm publish
+  only:
+    - tags
