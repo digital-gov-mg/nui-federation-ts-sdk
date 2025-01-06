@@ -5,8 +5,8 @@ import { axiosConfig } from './config'
 export abstract class Base {
   private client: AxiosInstance
 
-  constructor() {
-    this.client = axios.create(axiosConfig())
+  constructor(baseUrl: string, apiKey: string) {
+    this.client = axios.create(axiosConfig(baseUrl, apiKey))
   }
 
   protected async request<T>(
