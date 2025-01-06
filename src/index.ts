@@ -1,4 +1,4 @@
-import { UIN } from './api/uin'
+import { UIN } from './uin-service'
 
 export default class NuiFederation {
   public uin: UIN

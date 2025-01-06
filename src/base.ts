@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
-import { axiosConfig } from '../config/axios'
+import { axiosConfig } from './config'
 
 export abstract class Base {
   private client: AxiosInstance

@@ -3,7 +3,7 @@ import {
   GetOrCreateUINRequest,
   UINResponse,
   GenerateBatchUINResponse,
-} from '../types/uin'
+} from './types'
 
 export class UIN extends Base {
   async getOrCreateUIN(payload: GetOrCreateUINRequest[]): Promise<UINResponse> {
