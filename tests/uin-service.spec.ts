@@ -16,14 +16,16 @@ describe('UINService', () => {
   })
 
   it('should create a new UIN if no existing UIN is found', async () => {
-    const mockRequest = {
-      externalId: '123',
-      firstname: 'John',
-      lastname: 'Doe',
-      dateOfBirth: '2000-01-01',
-      birthCertificateId: 'BC123',
-      motherName: 'Jane Doe',
-    }
+    const mockRequest = [
+      {
+        externalId: '123',
+        firstname: 'John',
+        lastname: 'Doe',
+        dateOfBirth: '2000-01-01',
+        birthCertificateId: 'BC123',
+        motherName: 'Jane Doe',
+      },
+    ]
 
     const mockResponse = {
       code: 0,
@@ -43,14 +45,16 @@ describe('UINService', () => {
   it('should throw an error for a failed request', async () => {
     mock.onPut('/uins').reply(400, { message: 'Invalid request' })
 
-    const mockRequest = {
-      externalId: '123',
-      firstname: 'John',
-      lastname: 'Doe',
-      dateOfBirth: '2000-01-01',
-      birthCertificateId: 'BC123',
-      motherName: 'Jane Doe',
-    }
+    const mockRequest = [
+      {
+        externalId: '123',
+        firstname: 'John',
+        lastname: 'Doe',
+        dateOfBirth: '2000-01-01',
+        birthCertificateId: 'BC123',
+        motherName: 'Jane Doe',
+      },
+    ]
 
     await expect(uinService.getOrCreateUIN(mockRequest)).rejects.toThrow(
       'Request failed with status code 400',
