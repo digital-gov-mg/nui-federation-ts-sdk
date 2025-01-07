@@ -1,12 +1,20 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
 
-import { axiosConfig } from './config'
-
 export abstract class Base {
   private client: AxiosInstance
 
   constructor(baseUrl: string, apiKey: string) {
-    this.client = axios.create(axiosConfig(baseUrl, apiKey))
+    if (!baseUrl || !apiKey) {
+      throw new Error('Please provide a base URL and an API key')
+    }
+
+    this.client = axios.create({
+      baseURL: baseUrl,
+      headers: {
+        'Content-Type': 'application/json',
+        'api-key': apiKey,
+      },
+    })
   }
 
   protected async request<T>(

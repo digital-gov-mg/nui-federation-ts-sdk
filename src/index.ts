@@ -1,9 +1,9 @@
-import { UIN } from './uin-service'
+import { UIN } from './features/uin'
 
 export default class NuiFederation {
   public uin: UIN
 
-  constructor() {
-    this.uin = new UIN()
+  constructor(baseUrl: string, apiKey: string) {
+    this.uin = new UIN(baseUrl, apiKey)
   }
 }

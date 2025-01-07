@@ -1,9 +1,9 @@
-import { Base } from './base'
+import { Base } from '../base'
 import {
   GetOrCreateUINRequest,
   UINResponse,
   GenerateBatchUINResponse,
-} from './types'
+} from '../types'
 
 export class UIN extends Base {
   async getOrCreateUIN(payload: GetOrCreateUINRequest[]): Promise<UINResponse> {
