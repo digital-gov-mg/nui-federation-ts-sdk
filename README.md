@@ -7,7 +7,7 @@ This SDK connects to the NUI Federation API for getting or creating, revoke, gen
 ### Package Manager
 
 ```sh
-npm install @ugd/nui-federation-ts-sdk
+npm install nui-federation-ts-sdk
 ```
 
 # Example
@@ -58,4 +58,3 @@ try {
   console.log('Error generating UIN Batch:', err.message)
 }
 ```
-
