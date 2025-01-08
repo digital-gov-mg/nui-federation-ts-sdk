@@ -15,13 +15,13 @@ npm install nui-federation-ts-sdk
 ```ts
 import NuiFederation from 'nui-federation-ts-sdk'
 
-// Initialize UINService with baseUrl and apiKey
+// Initialize NUIFederation
 const baseUrl = 'https://example.com/api'
 const apiKey = 'your-api-key'
 const clientId = 'your-client-id'
 const clientSecret = 'your-client'
 
-const nuiFederation = NuiFederation({ baseUrl, apiKey, clientId, clientSecret })
+const nuiFederation = NuiFederation(baseUrl, apiKey, clientId, clientSecret)
 
 // Example 1: Get or Create UIN
 citizenDatas = [
