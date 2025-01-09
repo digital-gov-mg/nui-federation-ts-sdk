@@ -1,81 +1,27 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
-
-import { fetchAccessToken, getAccessToken, saveAccessToken } from './utils'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios'
+import { fetchAccessToken } from './utils'
 
 export abstract class Request {
   private client: AxiosInstance
-  private accessToken: string | null
-  private isAlreadyFetchingAccessToken: boolean
+  private accessToken: string | null = null
+  private isAlreadyFetchingAccessToken = false
 
   constructor(
-    baseUrl: string,
-    apiKey: string,
-    clientId: string,
-    clientSecret: string,
+    private baseUrl: string,
+    private apiKey: string,
+    private clientId: string,
+    private clientSecret: string,
   ) {
     if (!baseUrl || !apiKey || !clientId || !clientSecret) {
-      throw new Error(
-        'Please provide a base URL and an API key and client ID and client secret',
-      )
+      throw new Error('Please provide all required configuration parameters')
     }
-
-    this.accessToken = getAccessToken()
-    this.isAlreadyFetchingAccessToken = false
 
     this.client = axios.create({
-      baseURL: baseUrl,
+      baseURL: this.baseUrl,
       headers: {
         'Content-Type': 'application/json',
-        'api-key': apiKey,
+        'api-key': this.apiKey,
       },
-    })
-
-    if (!this.accessToken) {
-      fetchAccessToken({ baseUrl, clientId, clientSecret })
-        .then((data) => {
-          saveAccessToken(data)
-        })
-        .catch((error) => console.error(error))
-    }
-
-    this.client.interceptors.request.use(
-      (config) => {
-        config.headers.Authorization = `Bearer ${this.accessToken}`
-        return config
-      },
-      (error) => Promise.reject(error),
-    )
-
-    this.client.interceptors.response.use(null, (error) => {
-      if (!error.response) return Promise.reject(error)
-
-      const {
-        config,
-        response: { status },
-      } = error
-      const originalRequest = config
-
-      if (status === 401 || status === 403) {
-        if (!this.isAlreadyFetchingAccessToken) {
-          this.isAlreadyFetchingAccessToken = true
-
-          fetchAccessToken({ baseUrl, clientId, clientSecret })
-            .then((data) => {
-              this.isAlreadyFetchingAccessToken = false
-              saveAccessToken(data)
-            })
-            .catch((error) => console.error(error))
-        }
-
-        return new Promise((resolve) => {
-          originalRequest.headers.Authorization = `Bearer ${this.accessToken}`
-          resolve(this.client(originalRequest))
-        }).catch(() => {
-          console.error('Stop request')
-        })
-      }
-
-      return Promise.reject(error)
     })
   }
 
@@ -83,6 +29,57 @@ export abstract class Request {
     endpoint: string,
     options?: AxiosRequestConfig,
   ): Promise<T> {
+    this.client.interceptors.request.use(
+      (config) => {
+        if (this.accessToken) {
+          config.headers['Authorization'] = `Bearer ${this.accessToken}`
+        }
+        return config
+      },
+      (error) => Promise.reject(error),
+    )
+
+    this.client.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      async (error) => {
+        if (!error.response) return Promise.reject(error)
+
+        const { config, response } = error
+        const originalRequest = config
+
+        if (
+          (response.status === 401 || response.status === 403) &&
+          !originalRequest._retry
+        ) {
+          originalRequest._retry = true
+
+          if (!this.isAlreadyFetchingAccessToken) {
+            this.isAlreadyFetchingAccessToken = true
+
+            try {
+              this.isAlreadyFetchingAccessToken
+              const newToken = await fetchAccessToken({
+                baseUrl: this.baseUrl,
+                clientId: this.clientId,
+                clientSecret: this.clientSecret,
+              })
+              this.accessToken = newToken.data
+            } catch (err) {
+              return Promise.reject(err)
+            } finally {
+              this.isAlreadyFetchingAccessToken = false
+            }
+          }
+
+          originalRequest.headers['Authorization'] =
+            `Bearer ${this.accessToken}`
+          return this.client(originalRequest)
+        }
+
+        return Promise.reject(error)
+      },
+    )
+
     try {
       const response = await this.client.request<T>({
         url: endpoint,
@@ -95,7 +92,6 @@ export abstract class Request {
         error.response?.data?.message ||
         error.message ||
         'An error occurred while sending request'
-
       throw new Error(errorMessage)
     }
   }
