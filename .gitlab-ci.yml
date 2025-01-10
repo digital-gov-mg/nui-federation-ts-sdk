@@ -19,11 +19,11 @@ before_script:
   - corepack enable
   - corepack prepare pnpm@latest-10 --activate
   - pnpm config set store-dir .pnpm-store
+  - pnpm install
 
 lint:
   stage: lint
   script:
-    - pnpm install
     - pnpm run lint
   only:
     - merge_requests
