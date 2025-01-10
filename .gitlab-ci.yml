@@ -6,7 +6,6 @@ stages:
   - publish
 
 variables:
-  NODE_ENV: development
   NPM_TOKEN: $CI_JOB_TOKEN
 
 cache:
@@ -38,4 +37,3 @@ publish:
     - pnpm publish
   only:
     - tags
-
