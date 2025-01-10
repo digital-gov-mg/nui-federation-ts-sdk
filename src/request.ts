@@ -57,7 +57,6 @@ export abstract class Request {
             this.isAlreadyFetchingAccessToken = true
 
             try {
-              this.isAlreadyFetchingAccessToken
               const newToken = await fetchAccessToken({
                 baseUrl: this.baseUrl,
                 clientId: this.clientId,
