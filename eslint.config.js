@@ -1,6 +1,5 @@
 module.exports = [
   {
-    root: true,
     parser: '@typescript-eslint/parser',
     plugins: ['@typescript-eslint'],
     extends: ['eslint:recommended', 'plugin:@typescript-eslint/recommended'],
@@ -11,5 +10,6 @@ module.exports = [
       'no-console': 'warn',
     },
     ignorePatterns: ['dist', 'node_modules'],
+    files: ['src/**/*.js', 'src/**/*.jsx'],
   },
 ]
