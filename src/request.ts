@@ -16,6 +16,16 @@ export abstract class Request {
       throw new Error('Please provide all required configuration parameters')
     }
 
+    if (!this.accessToken) {
+      fetchAccessToken({
+        baseUrl: this.baseUrl,
+        clientId: this.clientId,
+        clientSecret: this.clientSecret,
+      })
+        .then((res) => (this.accessToken = res.data))
+        .catch((err) => console.error(err))
+    }
+
     this.client = axios.create({
       baseURL: this.baseUrl,
       headers: {
