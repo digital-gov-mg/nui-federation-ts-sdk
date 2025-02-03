@@ -18,7 +18,7 @@ npm install nui-federation-ts-sdk
 # Example
 
 ```ts
-import NuiFederation from '@digital-gov-mg/nui-federation-ts-sdk'
+import NuiFederation from '@digital-gov/nui-federation-ts-sdk'
 
 // Initialize NUIFederation
 const baseUrl = 'https://example.com/api'
