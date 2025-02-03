@@ -13,15 +13,14 @@ npm install nui-federation-ts-sdk
 # Example
 
 ```ts
-import NuiFederation from 'nui-federation-ts-sdk'
+import NuiFederation from '@digital-gov-mg/nui-federation-ts-sdk'
 
 // Initialize NUIFederation
 const baseUrl = 'https://example.com/api'
-const apiKey = 'your-api-key'
 const clientId = 'your-client-id'
 const clientSecret = 'your-client'
 
-const nuiFederation = NuiFederation(baseUrl, apiKey, clientId, clientSecret)
+const nuiFederation = new NuiFederation(baseUrl, clientId, clientSecret)
 
 // Example 1: Get or Create UIN
 citizenDatas = [
