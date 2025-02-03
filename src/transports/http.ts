@@ -31,8 +31,7 @@ export abstract class HTTP {
         clientSecret: this.clientSecret,
       })
         .then((res) => {
-          console.log(res.data.accessToken)
-          console.log(res.data.refreshToken)
+          this.accessToken = res.data.accessToken
         })
         .catch((err) => console.error(err))
     }
@@ -83,8 +82,7 @@ export abstract class HTTP {
                 clientSecret: this.clientSecret,
               })
 
-              console.log(res.data.accessToken)
-              console.log(res.data.refreshToken)
+              this.accessToken = res.data.accessToken
             } catch (err) {
               return Promise.reject(err)
             } finally {
